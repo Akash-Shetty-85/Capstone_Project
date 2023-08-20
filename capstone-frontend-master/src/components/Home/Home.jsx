@@ -1,14 +1,13 @@
 import React from 'react'
 import Header from '../../common/Header'
-import theme from '../../assets/Theme'
-import { ThemeProvider } from '@mui/material'
-import Theme from '../../assets/Theme'
+import { useTheme } from '@emotion/react'
+// import Theme from '../../assets/Theme'
 const Home = () => {
-  const theme =Theme();
+  const theme =useTheme();
   return (
     <>
     <Header/>
-    <ThemeProvider sx={{theme.palette.primarylight}}><div>Home</div></ThemeProvider>
+   <div bgcolor={theme.palette.primary.light} sx={{}}>Home</div>
     
     </>
   )
