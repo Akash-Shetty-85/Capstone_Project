@@ -3,8 +3,6 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
@@ -13,34 +11,100 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Header from '../../common/Header';
+import { useSnackbar } from "notistack";
+import { useNavigate } from 'react-router-dom';
 
-// function Copyright(props) {
-//   return (
-//     <Typography variant="body2" color="text.secondary" align="center" {...props}>
-//       {'Copyright © '}
-//       <Link color="inherit" href="https://mui.com/">
-//         Your Website
-//       </Link>{' '}
-//       {new Date().getFullYear()}
-//       {'.'}
-//     </Typography>
-//   );
-// }
 
-// TODO remove, this demo shouldn't need to reset the theme.
+
+function Copyright(props) {
+  return (
+    <Typography variant="body2" color="text.secondary" align="center" {...props}>
+      {'Copyright © '}
+      <Link color="inherit" href="https://github.com/Akash-Shetty-85/Capstone_Project">
+        Akash V
+      </Link>{' '}
+      {new Date().getFullYear()}
+      {'.'}
+    </Typography>
+  );
+}
+
+
 
 const defaultTheme = createTheme();
 
 export default function SignIn() {
-  const handleSubmit = (event) => {
+  const { enqueueSnackbar } = useSnackbar();
+  const histroy = useNavigate()
+  const url ='http://localhost:3001/api/v1/'
+
+  const handleSubmit =async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
-  };
+    
+      const requestBody = {
+        email:data.get("email"),
+        password:data.get("password")
+      }
 
+      const validate_data = validate(requestBody)
+      if(validate_data){
+        console.log(requestBody);
+        try {
+          const response = await fetch(`${url}auth`, {
+            method: 'POST', // Change the HTTP method as needed (GET, POST, PUT, DELETE, etc.)
+            headers: {
+              'Content-Type': 'application/json', // Set the content type based on your API requirements
+            },
+            body: JSON.stringify(requestBody),
+          });
+    
+          if (response.ok) {
+            const responseData = await response.json();
+            // console.log('API Response:', responseData);
+            histroy("/")
+            persistLogin(responseData)
+            enqueueSnackbar("Login sucessfull",{variant:'success'})
+            // Handle the API response data here
+          } else {
+            console.error('API Error:', response.statusText);
+            // Handle API errors here
+          }
+        } catch (error) {
+          console.error('Fetch Error:', error);
+          // Handle fetch errors here
+        }
+
+      }
+      
+    };
+    
+    const validate = (data) =>{
+      const {email ,password} = data
+      if(email === '' && password ===''){
+        enqueueSnackbar('Email and password is required' ,{variant:'error'})
+        return false
+      }
+      else if(email === ''){
+        enqueueSnackbar('Email is required',{variant:'error'})
+        return false
+      }
+      else if(password ===''){
+        enqueueSnackbar('Password is required',{variant:'error'})
+        return false
+      }
+    return true;
+
+  }
+
+  const persistLogin = ( data) =>{
+    const {name,email,isAuthenticated} = data
+    console.log(data);
+    console.log(name);
+    localStorage.setItem("username",name)
+    localStorage.setItem("email",email)
+    localStorage.setItem("aunthicated",isAuthenticated)
+  }
   return (
     <>
     <Header hasHiddenAuthButtons/>
@@ -105,7 +169,7 @@ export default function SignIn() {
             </Grid>
           </Box>
         </Box>
-        {/* <Copyright sx={{ mt: 8, mb: 4 }} /> */}
+        <Copyright sx={{ mt: 8, mb: 4 }} />
       </Container>
     </ThemeProvider>
     </>
