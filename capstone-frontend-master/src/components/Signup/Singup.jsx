@@ -265,6 +265,7 @@ function SignUp() {
 
     const validateData = validate(formdata);
     if (validateData) {
+      console.log(formdata);
       try {
         const response = await fetch(`${url}/users`, {
           method: 'POST',

@@ -60,11 +60,11 @@ export default function SignIn() {
           });
     
           if (response.ok) {
-            console.log("Auth token",response);
+            console.log("Auth token",response.headers.get('x-auth-token'));
             const responseData = await response.json();
             console.log('API Response:', responseData);
             histroy("/")
-            persistLogin(responseData)
+            persistLogin(responseData,response)
             enqueueSnackbar("Login sucessfull",{variant:'success'})
             // Handle the API response data here
           } else {
@@ -100,13 +100,15 @@ export default function SignIn() {
 
   }
 
-  const persistLogin = ( data) =>{
+  const persistLogin = ( data,header) =>{
     const {name,email,isAuthenticated} = data
     console.log(data);
     console.log(name);
+    console.log(header.headers.get('x-auth-token'));
     localStorage.setItem("username",name)
     localStorage.setItem("email",email)
     localStorage.setItem("aunthicated",isAuthenticated)
+    localStorage.setItem("token",header.headers.get('x-auth-token'))
   }
   return (
     <>
