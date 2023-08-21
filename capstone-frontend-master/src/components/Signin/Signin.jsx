@@ -60,19 +60,22 @@ export default function SignIn() {
           });
     
           if (response.ok) {
+            console.log("Auth token",response);
             const responseData = await response.json();
-            // console.log('API Response:', responseData);
+            console.log('API Response:', responseData);
             histroy("/")
             persistLogin(responseData)
             enqueueSnackbar("Login sucessfull",{variant:'success'})
             // Handle the API response data here
           } else {
             console.error('API Error:', response.statusText);
+            enqueueSnackbar(`${ response.statusText}`,{variant:'error'})
             // Handle API errors here
           }
         } catch (error) {
           console.error('Fetch Error:', error);
           // Handle fetch errors here
+          enqueueSnackbar(`${error}`,{variant:'error'})
         }
 
       }
