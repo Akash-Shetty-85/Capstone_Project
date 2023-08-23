@@ -51,7 +51,7 @@ export default function SignIn() {
       if(validate_data){
         console.log(requestBody);
         try {
-          const response = await fetch(`${url}auth`, {
+          const response = await fetch(`http://localhost:3001/api/v1/auth`, {
             method: 'POST', // Change the HTTP method as needed (GET, POST, PUT, DELETE, etc.)
             headers: {
               'Content-Type': 'application/json', // Set the content type based on your API requirements
@@ -60,7 +60,7 @@ export default function SignIn() {
           });
     
           if (response.ok) {
-            console.log("Auth token",response.headers.get('x-auth-token'));
+            console.log("Auth token",response.headers);
             const responseData = await response.json();
             console.log('API Response:', responseData);
             histroy("/")

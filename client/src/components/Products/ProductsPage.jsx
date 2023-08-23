@@ -13,10 +13,12 @@ function ProductsPage() {
   const fetchCategories = async () => {
     const url = 'http://localhost:3001/api/v1';
     try {
-      const response = await fetch(`${url}/products/categories`);
+      const response = await fetch(`${url}/products`);
       if (response.ok) {
         const categories = await response.json();
         // Handle the categories data
+        console.log("Response",response);
+        console.log(categories);
         return categories;
       } else {
         console.error('Error fetching categories:', response.statusText);
