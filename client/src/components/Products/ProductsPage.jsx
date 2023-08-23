@@ -3,45 +3,68 @@ import { useNavigate } from 'react-router-dom';
 import ToggleButton from '@mui/material/ToggleButton';
 
 import Card from '@mui/material/Card';
-
+import { CardMedia, Grid, ToggleButtonGroup } from '@mui/material';
+import '../Products/Product.css'
 function ProductsPage() {
   const navigate = useNavigate();
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [products, setProducts] = useState([]);
   const [sortingOption, setSortingOption] = useState('default');
+  // const [sortingOption, setSortingOption] = useState('default');
   const fetchCategories = async () => {
     const url = 'http://localhost:3001/api/v1';
     try {
       const response = await fetch(`${url}/products`);
       if (response.ok) {
         const categories = await response.json();
-        // Handle the categories data
-        console.log("Response",response);
+
+        console.log("Response", response);
         console.log(categories);
-        return categories;
+        // return categories;
+        setProducts(categories)
       } else {
         console.error('Error fetching categories:', response.statusText);
-        // Handle error
+
       }
     } catch (error) {
       console.error('Fetch error:', error);
-      // Handle fetch error
+
     }
   };
-  
+
   useEffect(() => {
     fetchCategories()
-    // Fetch categories from the backend and set in state
-    // Fetch products based on selectedCategory and sortingOption
-  }, [selectedCategory, sortingOption]);
+
+  }, []);
 
   const handleCategoryChange = (category) => {
     setSelectedCategory(category);
   };
 
+  // const descending = () =>{
+  //     // products.sort((a,b) => a.price.localeCompare(b.price))
+  ;
+  // }
   const handleSortingChange = (option) => {
     setSortingOption(option);
+    switch (option) {
+      case 'default':
+        console.log("acessing");
+        fetchCategories();
+        break;
+
+      case 'priceHighToLow':
+        setProducts([...products].sort((a, b) => b.price - a.price));
+        break;
+
+      case 'priceLowToHigh':
+        setProducts([...products].sort((a, b) => a.price - b.price));
+        break
+      default:
+        break;
+    }
+    // descending()
   };
 
   return (
@@ -57,21 +80,40 @@ function ProductsPage() {
         </ToggleButton>
       ))}
 
-      {/* Sorting Options */}
-      <button onClick={() => handleSortingChange('default')}>Default</button>
-      <button onClick={() => handleSortingChange('priceHighToLow')}>Price High to Low</button>
-      {/* ... other sorting options ... */}
+
+      <ToggleButtonGroup
+        className="sorting-buttons"
+        value={sortingOption}
+        exclusive
+        onChange={(event, newOption) => handleSortingChange(newOption)}
+      >
+        <ToggleButton value="default">Default</ToggleButton>
+        <ToggleButton value="priceHighToLow">Price High to Low</ToggleButton>
+        <ToggleButton value="priceLowToHigh">Price Low to High</ToggleButton>
+      </ToggleButtonGroup>
 
       {/* Display Products */}
-      {products.map((product) => (
-        <Card key={product.id}>
-          <img src={product.image} alt={product.name} />
-          <h3>{product.name}</h3>
-          <p>{product.price}</p>
-          {/* ... other product details ... */}
-          <button onClick={() => navigate(`/product/${product.id}`)}>View Details</button>
-        </Card>
-      ))}
+      <Grid container spacing={2}>
+        {products.map((product) => (
+          <Grid item xs={12} md={4} key={product._id}>
+            <Card sx={{ maxWidth: 345 }}>
+
+              <CardMedia
+                component="img"
+                height="194"
+                sx={{ objectFit: 'contain' }}
+                image={product.imageURL}
+                alt={product.name}
+              />
+              <h3>{product.name}</h3>
+              <p>RS. {product.price} </p>
+              <h2>{product.description}</h2>
+
+              <button onClick={() => navigate(`/product/${product._id}`)}>View Details</button>
+            </Card>
+          </Grid>
+        ))}
+      </Grid>
     </div>
   );
 }
