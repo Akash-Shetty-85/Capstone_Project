@@ -5,13 +5,14 @@ import ToggleButton from '@mui/material/ToggleButton';
 import Card from '@mui/material/Card';
 import { CardMedia, Grid, ToggleButtonGroup } from '@mui/material';
 import '../Products/Product.css'
+import ProductDetail from '../../ProductDetails/ProductDetail';
+
 function ProductsPage() {
   const navigate = useNavigate();
-  const [categories, setCategories] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState(null);
+  
   const [products, setProducts] = useState([]);
   const [sortingOption, setSortingOption] = useState('default');
-  // const [sortingOption, setSortingOption] = useState('default');
+  
   const fetchCategories = async () => {
     const url = 'http://localhost:3001/api/v1';
     try {
@@ -38,14 +39,8 @@ function ProductsPage() {
 
   }, []);
 
-  const handleCategoryChange = (category) => {
-    setSelectedCategory(category);
-  };
 
-  // const descending = () =>{
-  //     // products.sort((a,b) => a.price.localeCompare(b.price))
-  ;
-  // }
+  
   const handleSortingChange = (option) => {
     setSortingOption(option);
     switch (option) {
@@ -64,21 +59,13 @@ function ProductsPage() {
       default:
         break;
     }
-    // descending()
+    
   };
 
   return (
     <div>
-      {/* Category Tabs */}
-      {categories.map((category) => (
-        <ToggleButton
-          key={category.id}
-          value={category.id}
-          onChange={() => handleCategoryChange(category.id)}
-        >
-          {category.name}
-        </ToggleButton>
-      ))}
+      
+      
 
 
       <ToggleButtonGroup
@@ -109,7 +96,7 @@ function ProductsPage() {
               <p>RS. {product.price} </p>
               <h2>{product.description}</h2>
 
-              <button onClick={() => navigate(`/product/${product._id}`)}>View Details</button>
+              <button onClick={() => navigate(`/product/${product._id}`)} >View Details</button>
             </Card>
           </Grid>
         ))}
