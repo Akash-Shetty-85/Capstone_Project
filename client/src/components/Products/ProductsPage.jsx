@@ -5,7 +5,7 @@ import ToggleButton from '@mui/material/ToggleButton';
 import Card from '@mui/material/Card';
 import { CardMedia, Grid, ToggleButtonGroup } from '@mui/material';
 import '../Products/Product.css'
-import ProductDetail from '../../ProductDetails/ProductDetail';
+// import ProductDetail from '../../ProductDetails/ProductDetail';
 
 function ProductsPage() {
   const navigate = useNavigate();

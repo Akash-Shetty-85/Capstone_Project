@@ -7,6 +7,7 @@ import Singup from './components/Signup/Singup';
 import Not_Found from './components/Not_Found/Not_Found';
 import SignIn from './components/Signin/Signin';
 import ProductDetail from './ProductDetails/ProductDetail';
+import CreateOrder from './components/CreateOrder/CreateOrder';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Route path="/signup" element={<Singup/>}/>
         <Route path="/signin" element={<SignIn/>}/>
         <Route path="/product/:id" element={<ProductDetail/>}/>
+        <Route path="/order" element={<CreateOrder/>} />
         <Route path="*" element={<Not_Found/>} />
       </Routes>
     </BrowserRouter>
