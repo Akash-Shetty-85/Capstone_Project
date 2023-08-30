@@ -130,8 +130,7 @@ import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 const ProductDetail = () => {
     const navigate = useNavigate()
-    // const { id } = useParams();
-    // const [productDetails, setProductDetails] = useState(null);
+    
     const [quantity, setQuantity] = useState(1); // State to track quantity input
     const { id } = useParams();
         const [productDetails, setProductDetails] = useState(null);
